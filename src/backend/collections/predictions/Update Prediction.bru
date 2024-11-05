@@ -1,0 +1,17 @@
+meta {
+  name: Update Prediction
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base-url}}/api/predictions/2023-2056234
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "predicted_fail_codes": [1, 2, 3],
+  }
+}

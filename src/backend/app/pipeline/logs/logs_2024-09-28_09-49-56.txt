@@ -1,0 +1,13 @@
+[INFO] Script './pipeline/steps/modelo_principal/processa_falhas_1.py' successfully fetched.
+[INFO] Module 'processa_falhas_1' successfully loaded from /var/folders/n4/4rgmfhrx7cx7pqx4s9zv_99r0000gn/T/tmp8yijy6p1.py.
+[INFO] Executing 'processa_falhas_1'...
+[INFO] 'processa_falhas_1' completed successfully.
+[INFO] Script './pipeline/steps/modelo_principal/processa_falhas_2.py' successfully fetched.
+[INFO] Module 'processa_falhas_2' successfully loaded from /var/folders/n4/4rgmfhrx7cx7pqx4s9zv_99r0000gn/T/tmpfqpqxf2f.py.
+[INFO] Executing 'processa_falhas_2'...
+[INFO] 'processa_falhas_2' completed successfully.
+[INFO] Script './pipeline/steps/modelo_principal/processa_resultados_1.py' successfully fetched.
+[INFO] Module 'processa_resultados_1' successfully loaded from /var/folders/n4/4rgmfhrx7cx7pqx4s9zv_99r0000gn/T/tmpqj6ad3ee.py.
+[INFO] Executing 'processa_resultados_1'...
+[INFO] 'processa_resultados_1' completed successfully.
+[ERROR] Error fetching script from GridFS: [Errno 2] No such file or directory: './pipeline/steps/modelo_principal/processa_resultados_2.py'

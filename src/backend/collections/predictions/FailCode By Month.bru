@@ -1,0 +1,20 @@
+meta {
+  name: FailCode By Month
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{base-url}}/api/predictions/fail-codes-by-month
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "year": 2024,
+    "month": 1,
+    "fail_code": 1
+  }
+  
+}

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "cross-the-line",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -1,0 +1,217 @@
+---
+title: "Deploy em uma Instância EC2 da AWS"
+sidebar_position: 4
+
+---
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Índice
+
+- [1.1 Introdução](#11-introducao)
+- [2.1 Configuração da Instância](#21-configuracao-da-instancia)
+- [3.1 Acesso à Instância](#31-acesso-a-instancia)
+- [4.1 Instalação do Docker](#41-instalacao-do-docker)
+- [5.1 Deploy da Aplicação](#51-deploy-da-aplicacao)
+- [6.1 Conclusão](#61-conclusao)
+
+
+## **1.1** Introdução
+
+Neste projeto, optamos por realizar o deploy integral da aplicação na nuvem, utilizando uma instância do tipo `t2.large` na **Amazon Web Services** (AWS). Esta configuração dispõe de `8GB de memória RAM` e `2 vCPUs`, assegurando um desempenho equilibrado para o processamento dos containers e fornecendo recursos adequados para a execução eficiente da aplicação. O sistema operacional selecionado para a instância é o `Ubuntu 22.04 LTS`, uma distribuição reconhecida por sua estabilidade e ampla adoção no mercado, garantindo compatibilidade com diversas ferramentas e tecnologias. Adicionalmente, o Docker foi instalado para gerenciar e orquestrar os containers de maneira ágil e segura.
+
+O principal objetivo do deploy na AWS é ampliar a acessibilidade ao projeto. Ao hospedar a aplicação na nuvem, ela se torna acessível de qualquer local e dispositivo, eliminando a necessidade de instalar dependências localmente ou de executar o projeto diretamente na máquina do usuário. Essa abordagem facilita o trabalho colaborativo e a integração contínua, além de proporcionar uma experiência de uso mais simplificada e eficiente para todos os envolvidos.
+
+Além disso, essa estratégia de deploy oferece vantagens significativas em termos de escalabilidade e confiabilidade. Com a infraestrutura robusta da AWS, a aplicação pode crescer conforme a demanda sem comprometer seu desempenho. O ambiente pode ser gerenciado remotamente, permitindo monitoramento em tempo real, ajustes rápidos e a implementação de novas versões de forma facilitada. Isso torna o processo mais eficiente e minimiza potenciais problemas operacionais, garantindo a continuidade e a estabilidade do serviço.
+
+## **2.1** Configuração da Instância
+
+Para efetuar o deploy na AWS, foi necessário configurar uma instância EC2 com especificações apropriadas para a aplicação. Optamos por uma instância do tipo `t2.large`, que oferece um equilíbrio adequado entre recursos e custo, assegurando um desempenho satisfatório para a execução dos containers. A configuração da instância foi realizada com as seguintes características:
+
+- **Tipo de Instância:** `t2.large`
+- **Sistema Operacional:** `Ubuntu 22.04 LTS`
+- **Memória RAM:** `8GB`
+- **vCPUs:** `2`
+- **Armazenamento:** `SSD 30GB`
+
+:::warning IMPORTANTE
+Optamos pela instância `t2.large`; entretanto, a funcionalidade de treinamento excede a capacidade de memória desta máquina. Para possibilitar o treinamento do modelo, seria necessário, no mínimo, uma instância do tipo `t2.xlarge` ou superior.
+:::
+
+Após a seleção das especificações da instância, procedeu-se à sua criação e configuração do acesso mediante uma chave SSH. A chave privada gerada durante o processo deve ser armazenada de forma segura, pois será utilizada para acessar a instância remotamente.
+
+## **3.1** Acesso à Instância
+
+O acesso à instância EC2 na AWS requer o uso de um cliente SSH, como o `OpenSSH` ou o `PuTTY`. A conexão é estabelecida através do endereço IP público da instância e da chave privada associada. O procedimento para acessar a instância é descrito a seguir:
+
+### **3.2** **Obtenção da Chave Privada `.pem`:**
+   Primeiramente, é necessário possuir a chave privada `.pem` gerada durante a criação da instância EC2. Esta chave deve ser mantida em um local seguro.
+
+   :::info
+   Neste cenário, a chave SSH será disponibilizada exclusivamente para os membros do projeto. Para acessos futuros, será necessário criar uma nova instância **EC2**, para isto, pode acessar este [tutorial](https://www.youtube.com/watch?v=0Gz-PUnEUF0)
+   :::
+
+### **3.3 Acesso via Terminal:**
+   Abra um terminal e navegue até o diretório onde a chave privada `.pem` está armazenada.
+
+### **3.4 Comando de Conexão:**
+   Utilize o seguinte comando para conectar-se à instância EC2:
+
+   ```bash
+   ssh -i "chave.pem" ubuntu@endereco_ip
+   ```
+
+   Substitua `chave.pem` pelo nome da sua chave privada e `endereco_ip` pelo endereço IP público da instância.
+
+### **3.5 Estabelecimento da Conexão:**
+   Após a execução do comando, a conexão será estabelecida, permitindo o acesso à instância EC2 e a execução de comandos no terminal remotamente.
+
+## **4.1** Instalação do Docker
+
+Para efetuar o deploy da aplicação na instância EC2, é imprescindível instalar o Docker e o Docker Compose, ferramentas responsáveis pela gestão e orquestração dos containers que compõem a aplicação. O Docker permite a execução de aplicações em ambientes isolados, facilitando o processo de deploy e a manutenção de sistemas complexos. Para maiores informações sobre o Docker, consulte a seção [Sprint 3](/Sprint%203/Dockerizacao/Docker).
+
+Os passos para a instalação do Docker na instância EC2 são os seguintes:
+
+### **4.2 Atualização do Índice de Pacotes:**
+
+   ```bash
+   sudo apt update
+   sudo apt upgrade
+   ```
+
+### **4.3 Instalação do Docker:**
+
+   ```bash
+   sudo apt install docker.io
+   ```
+
+### **4.4 Inicialização do Docker via systemctl:**
+
+   ```bash
+   sudo systemctl start docker
+   sudo systemctl enable docker
+   ```
+
+### **4.5 Download do Docker Compose:**
+
+   ```bash
+   sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep 'tag_name' | cut -d\" -f4)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   ```
+
+### **4.6 Permissão de Execução ao Docker Compose:**
+
+   ```bash
+   sudo chmod +x /usr/local/bin/docker-compose
+   ```
+
+### **4.7 Verificação da Instalação do Docker Compose:**
+
+   ```bash
+   docker-compose --version
+   ```
+
+   Se todos os comandos forem executados com sucesso, o Docker e o Docker Compose estarão instalados e prontos para uso na instância EC2.
+
+### **4.6.1 Passo Opcional:**
+   Caso o comando `docker-compose` não seja reconhecido, adicione um link simbólico para o comando:
+
+   ```bash
+   sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+   ```
+
+## **5.1** Deploy da Aplicação
+
+Com o Docker e o Docker Compose instalados na instância EC2, o próximo passo é realizar o deploy da aplicação. Siga os procedimentos abaixo:
+
+### **5.2 Clonagem do Repositório:**
+
+   ```bash
+   git clone https://github.com/Inteli-College/2024-2A-T08-EC07-G01
+   ```
+
+### **5.3 Navegação até o Diretório do Projeto:**
+
+   ```bash
+   cd 2024-2A-T08-EC07-G01/src
+   ```
+
+### **5.4 Alteração do IP do Backend no `docker-compose.yml`:**
+
+   ```bash
+   nano docker-compose.yml
+   ```
+
+   Dentro do arquivo `docker-compose.yml`, é necessário modificar três aspectos essenciais. Primeiramente, o IP do backend deve ser alterado para o IP da instância EC2. Para obter o IP, acesse a página da instância na AWS e copie o IP público.
+
+   <Tabs>
+       <TabItem value="antes" label="Antes" default>
+
+   ```yaml showLineNumbers
+   frontend:
+       build:
+           context: ./app
+           dockerfile: Dockerfile
+           args:
+           # highlight-next-line
+               BACKEND_URL: http://localhost:8000
+       container_name: frontend
+       ports:
+       # highlight-next-line
+           - "3000:3000"
+       environment:
+       # highlight-next-line
+           - BACKEND_URL=http://localhost:8000
+       depends_on:
+           - backend
+       networks:
+           - network
+   ```
+
+   </TabItem>
+
+   <TabItem value="depois" label="Depois">
+
+   ```yaml showLineNumbers
+   frontend:
+       build:
+           context: ./app
+           dockerfile: Dockerfile
+           args:
+           # highlight-next-line
+               BACKEND_URL: http://IP-EC2:8000
+       container_name: frontend
+       ports:
+       # highlight-next-line
+           - "80:3000"
+       environment:
+       # highlight-next-line
+           - BACKEND_URL=http://IP-EC2:8000
+       depends_on:
+           - backend
+       networks:
+           - network
+   ```
+
+   </TabItem>
+   </Tabs>
+
+### **5.5 Execução do Docker Compose:**
+
+   ```bash
+   docker-compose up
+   ```
+
+### **5.6 Verificação da Aplicação:**
+   Após a execução do comando, a aplicação estará operacional. Os serviços estarão acessíveis nas seguintes portas:
+
+   - **FrontEnd**: [http://endereco_ip](http://endereco_ip)
+   - **BackEnd**: [http://endereco_ip:8000](http://endereco_ip:8000)
+   - **Documentação do Backend**: [http://endereco_ip:8000/docs](http://endereco_ip:8000/docs)
+   - **MongoDB**: [http://endereco_ip:27017](http://endereco_ip:27017)
+
+## **6.1** Conclusão
+
+Com a aplicação devidamente implantada na instância EC2 da AWS, torna-se possível acessar e utilizar a aplicação a partir de qualquer localidade, eliminando a necessidade de instalar dependências localmente e facilitando o trabalho colaborativo. O uso do Docker e do Docker Compose garante a execução eficiente e segura dos containers, proporcionando escalabilidade e confiabilidade à aplicação. O deploy na nuvem oferece uma série de benefícios, incluindo acessibilidade, escalabilidade e confiabilidade, simplificando o processo de desenvolvimento e manutenção.
+
+Com todas as etapas concluídas, a aplicação está pronta para ser utilizada e acessada por todos os integrantes do projeto, proporcionando uma experiência de uso intuitiva e eficaz.
+

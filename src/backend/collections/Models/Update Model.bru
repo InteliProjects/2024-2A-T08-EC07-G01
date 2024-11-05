@@ -1,0 +1,17 @@
+meta {
+  name: Update Model
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base-url}}/api/models/RandomForestModel_v1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "gridfs_path": "/path/to/model/in/gridfs222"
+  }
+}

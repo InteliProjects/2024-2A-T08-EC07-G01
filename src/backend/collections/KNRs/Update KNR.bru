@@ -1,0 +1,17 @@
+meta {
+  name: Update KNR
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base-url}}/api/knr/2023-2056234
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "real_fails": ["carro quebr"]
+  }
+}

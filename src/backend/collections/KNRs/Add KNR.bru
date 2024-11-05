@@ -1,0 +1,24 @@
+meta {
+  name: Add KNR
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base-url}}/api/knr/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "KNR": "2023-2056234",
+      "NAME": "012001",
+      "ID": 1,
+      "STATUS": 10,
+      "UNIT": null,
+      "VALUE_ID": null,
+      "VALUE": null,
+      "DATA": "2024-05-16 13:41:25"
+  }
+}

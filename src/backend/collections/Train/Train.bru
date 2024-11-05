@@ -1,0 +1,19 @@
+meta {
+  name: Train with new fails data
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base-url}}/api/train/
+  body: form-data
+  auth: none
+}
+
+body:form-data {
+  file {
+    name: "df_falhas"
+    path: "/path/to/your/file.csv" // replace with your actual file path
+    type: "text/csv"
+  }
+}

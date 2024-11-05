@@ -1,0 +1,112 @@
+{
+    "model_path": "./pipeline/models/classificacao",
+    "model_name": "classificacao",
+    "training_steps": [
+        {
+            "name": "process_falhas_1",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/process_falhas1.py",
+            "dataframes": ["df_falhas"],
+            "output_dataframe": "df_falhas_processed_1"
+        },
+
+        {
+            "name": "process_falhas_2",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/process_falhas2.py",
+            "dataframes": ["df_falhas_processed_1"],
+            "output_dataframe": "df_falhas_processed_2"
+        },
+
+        {
+            "name": "process_resultados_1",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/process_resultados1.py",
+            "dataframes": ["df_resultados"],
+            "output_dataframe": "df_resultados_processed_1"
+        },
+
+        {
+            "name": "process_resultados_2",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/process_resultados2.py",
+            "dataframes": ["df_resultados_processed_1"],
+            "output_dataframe": "df_resultados_processed_2"
+        },
+
+        {
+            "name": "merge_falhas_resultados",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/merge_falhas_resultados.py",
+            "dataframes": ["df_resultados_processed_2", "df_falhas_processed_2"],
+            "output_dataframe": "df_merged2"
+        },
+
+        {
+            "name": "preprocess_data",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/pre_process.py",
+            "dataframes": ["df_resultados", "df_merged2"],
+            "output_dataframe": "df_final"
+        },
+        {
+            "name": "treina_modelo",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/treina_modelo.py",
+            "dataframes": ["df_final"],
+            "output_dataframe": "models_metadata"
+        }
+    ],
+    "predict_steps": [
+        {
+            "name": "preprocess_input_data",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/pre_process_input.py",
+            "dataframes": ["df_input"],
+            "output_dataframe": "df_preprocessed_input"
+        },
+        {
+            "name": "predict_S_GROUP_ID_1",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict1.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_1"
+        },
+        {
+            "name": "predict_S_GROUP_ID_2",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict2.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_2"
+        },
+        {
+            "name": "predict_S_GROUP_ID_4",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict4.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_4"
+        },
+        {
+            "name": "predict_S_GROUP_ID_5",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict5.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_5"
+        },
+        {
+            "name": "predict_S_GROUP_ID_133",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict133.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_133"
+        },
+        
+        {
+            "name": "predict_S_GROUP_ID_137",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict137.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_137"
+        },
+
+        {
+            "name": "predict_S_GROUP_ID_140",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict140.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_140"
+        },
+        
+        {
+            "name": "predict_S_GROUP_ID_9830946",
+            "file_path": "/app/app/pipeline/steps/modelo_classificacao/predict9830946.py",
+            "dataframes": ["df_preprocessed_input"],
+            "output": "prediction_S_GROUP_ID_9830946"
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+{
+    "model_path": "./pipeline/models/principal",
+    "model_name": "principal",
+    "prediction_steps": [
+        {
+            "name": "processa_falhas_1",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/processa_falhas_1.py",
+            "dataframes": ["df_falhas"],
+            "output_dataframe": "df_falhas_processed_1"
+        },
+        {
+            "name": "processa_falhas_2",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/processa_falhas_2.py",
+            "dataframes": ["df_falhas_processed_1"],
+            "output_dataframe": "df_falhas_processed_2"
+        },
+        {
+            "name": "processa_resultados_1",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/processa_resultados_1.py",
+            "dataframes": ["df_resultados"],
+            "output_dataframe": "df_resultados_processed_1"
+        },
+        {
+            "name": "processa_resultados_2",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/processa_resultados_2.py",
+            "dataframes": ["df_resultados_processed_1"],
+            "output_dataframe": "df_resultados_processed_2"
+        },
+        {
+            "name": "junta_falhas_resultados",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/junta_falhas_resultados.py",
+            "dataframes": ["df_resultados_processed_2", "df_falhas_processed_2"],
+            "output_dataframe": "df_merged"
+        }
+    ],
+    "training_steps": [
+        {
+            "name": "treina_modelo",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/treina_modelo.py",
+            "dataframes": ["df_merged"],
+            "output_dataframe": "trained_model"
+        }
+    ],
+    "predict_steps": [
+        {
+            "name": "predict_model",
+            "file_path": "/app/app/pipeline/steps/modelo_principal/predict.py",
+            "dataframes": ["df_input"],
+            "output_dataframe": "prediction_result"
+        }
+    ]
+}

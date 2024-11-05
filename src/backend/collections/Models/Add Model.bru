@@ -1,0 +1,26 @@
+meta {
+  name: Add Model
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base-url}}/api/models/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+                  "model_name": "RandomForestModel_v1",
+                  "type_model": "Tipo-1",
+                  "gridfs_path": "/path/to/model/in/gridfs",
+                  "recipe_path": "/path/to/recipe/in/gridfs",
+                  "accuracy": 0.10,
+                  "precision": 0.20,
+                  "recall": 0.30,
+                  "f1_score": 0.40, 
+                  "last_used": "2024-09-10T12:00:00",
+                  "using": "True"
+  }
+}
